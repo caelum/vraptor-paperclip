@@ -4,6 +4,6 @@ import br.com.caelum.vraptor.paperclip.UploadedImage;
 
 public interface ImageCropper {
 
-	UploadedImage crop(UploadedImage upload, int width, int height);
+	UploadedImage crop(UploadedImage upload, CropOperation operation);
 
 }

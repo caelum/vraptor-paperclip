@@ -15,16 +15,12 @@ public class DefaultImageCropper implements ImageCropper {
 	private ServletContext context;
 
 	@Override
-	public UploadedImage crop(UploadedImage upload, int width, int height) {
+	public UploadedImage crop(UploadedImage upload, CropOperation operation) {
 		
-		double imageWidth = upload.getWidth();
-		double imageHeight = upload.getHeight();
-		
-		double centerX = imageWidth / 2;
-		double centerY = imageHeight / 2;
-		
-		int topLeftX = (int) (centerX - ((double) width) / 2);
-		int topLeftY = (int) (centerY - ((double) height) / 2);
+		int topLeftX = operation.topLeftX();
+		int topLeftY = operation.topLeftY();
+		int width = operation.cropWidth();
+		int height = operation.cropHeight();
 		
 		BufferedImage cropped = Scalr.crop(upload.getImage(), topLeftX, topLeftY, width, height);
 		
