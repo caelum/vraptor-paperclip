@@ -45,9 +45,49 @@ file to png format.
 
 The plugin also handle of some simple image processing transformations.
 
-### resizing
+### image crop
 
-You can resize the image before the execution of the method:
+You can crop images before the execution of a method: 
+
+```java
+@Controller
+public class ProfilePhotoController {
+    
+	@Post("/profile/upload")
+	public void savePhoto(@Crop(width=100, height=100) UploadedImage image) {
+		image.save("/images/cropped.png");
+	}
+	
+}
+```
+
+The dafault behaviour is to crop the image in the center. You can specify the 
+type of cropping in the annotation. For example, to crop the image in the top 
+left: `@Crop(width=100, height=100, type=CropType.TOP_LEFT)`
+
+It's also possible to perform the cropping programmatically, with the `ImageCropper`:
+
+```java
+@Controller
+public class ProfilePhotoController {
+    
+	@Inject
+	private ImageCropper cropper;
+	
+    @Public
+    @Post("/profile/upload")
+    public void savePhoto(UploadedImage image) {
+    	UploadedImage cropped = cropper.crop(image, new CenteredCrop(image, 50, 50));
+        cropped.save("/images/upload.png");
+    }
+
+}
+```
+
+
+### image resize
+
+Similarlly, you can resize the image before the execution of the method:
 
 ```java
 @Controller
@@ -76,7 +116,6 @@ public class ProfilePhotoController {
 
     @Inject private ImageResizer resizer;
     
-    @Public
     @Post("/profile/upload")
     public void savePhoto(UploadedImage image) {
         UploadedImage resized = resizer.resize(image, new SimpleResize(100, 100));
