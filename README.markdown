@@ -43,7 +43,7 @@ file to png format.
 
 ## Processing images
 
-The plugin also handle of some simple image processing transformations.
+The plugin also handle some simple image processing transformations.
 
 ### Image crop
 
@@ -61,7 +61,7 @@ public class ProfilePhotoController {
 }
 ```
 
-The dafault behaviour is to crop the image in the center. You can specify the 
+The default behavior is to crop the image in the center. You can specify the 
 type of cropping in the annotation. For example, to crop the image in the top 
 left: `@Crop(width=100, height=100, type=CropType.TOP_LEFT)`
 
@@ -102,11 +102,9 @@ public class ProfilePhotoController {
 }
 ```
 
-This will resize the image maitaining its original proportion. You can also specify a ratio
-in the annotation, for example, `@Resize(ratio=0.5)` will resize the orginal image to 
+This will resize the image maintaining its original proportion. You can also specify a ratio
+in the annotation, for example, `@Resize(ratio=0.5)` will resize the original image to 
 the half of its original size.
-
-#### Resizing programmatically
 
 You can also use the `ImageResizer` class to resize your images programmatically:
 
