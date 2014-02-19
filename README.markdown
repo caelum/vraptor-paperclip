@@ -4,7 +4,7 @@ A VRaptor plugin to ease image manipulation.
 
 This plugin currently works only with VRaptor 4.x versions. 
 
-## installing
+## Installing
 
 Add to your pom:
 ```xml
@@ -18,7 +18,7 @@ Add to your pom:
 		
 Or simply copy all jars to your classpath.
 		
-## handling a image upload
+## Handling a image upload
 
 To receive a uploaded image, you can receive in your method a instance of UploadedImage:
 
@@ -41,11 +41,11 @@ This controller will save the uploaded image as png inside of the
 for example). Note that vraptor-paperclip will take care of converting the uploaded
 file to png format.
 
-## processing images
+## Processing images
 
 The plugin also handle of some simple image processing transformations.
 
-### image crop
+### Image crop
 
 You can crop images before the execution of a method: 
 
@@ -85,7 +85,7 @@ public class ProfilePhotoController {
 ```
 
 
-### image resize
+### Image resize
 
 Similarlly, you can resize the image before the execution of the method:
 
@@ -106,7 +106,7 @@ This will resize the image maitaining its original proportion. You can also spec
 in the annotation, for example, `@Resize(ratio=0.5)` will resize the orginal image to 
 the half of its original size.
 
-#### resizing programmatically
+#### Resizing programmatically
 
 You can also use the `ImageResizer` class to resize your images programmatically:
 
