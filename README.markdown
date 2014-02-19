@@ -1,10 +1,10 @@
-## vraptor-paperclip 
+# vraptor-paperclip 
 
 A VRaptor plugin to ease image manipulation.
 
 This plugin currently works only with VRaptor 4.x versions. 
 
-# installing
+## installing
 
 Add to your pom:
 ```xml
@@ -18,7 +18,7 @@ Add to your pom:
 		
 Or simply copy all jars to your classpath.
 		
-# handling a image upload
+## handling a image upload
 
 To receive a uploaded image, you can receive in your method a instance of UploadedImage:
 
@@ -35,17 +35,17 @@ public class ProfilePhotoController {
 }
 ```
 
-This method will save the uploaded image with png format inside of the
+This controller will save the uploaded image as png inside of the
 `/images` directory in your webapp (if you access
-`http://yourserver:8080/appcontext/images/upload.png` you will see the file,
-for example). Note that vraptor-paperclip will deal of converting the uploaded
+`http://localhost:8080/appcontext/images/upload.png` you will see the file,
+for example). Note that vraptor-paperclip will take care of converting the uploaded
 file to png format.
 
-# processing images
+## processing images
 
 The plugin also handle of some simple image processing transformations.
 
-## resizing
+### resizing
 
 You can resize the image before the execution of the method:
 
@@ -66,7 +66,7 @@ This will resize the image maitaining its original proportion. You can also spec
 in the annotation, for example, `@Resize(ratio=0.5)` will resize the orginal image to 
 the half of its original size.
 
-### resizing programmatically
+#### resizing programmatically
 
 You can also use the `ImageResizer` class to resize your images programmatically:
 
