@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.paperclip;
+package br.com.caelum.vraptor.paperclip.resize;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,5 +12,5 @@ public @interface Resize {
 	int width() default 0;
 	int height() default 0;
 	double ratio() default 1.0;
-
+	
 }

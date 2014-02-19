@@ -2,30 +2,21 @@ package br.com.caelum.vraptor.paperclip;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import br.com.caelum.vraptor.observer.upload.UploadedFile;
 
 public class UploadedImage {
 	
 	private ServletContext context;
 	
-	private UploadedFile file;
-
 	private BufferedImage image;
 
-	public UploadedImage(UploadedFile file, BufferedImage image, ServletContext context) {
-		this.file = file;
+	public UploadedImage(BufferedImage image, ServletContext context) {
 		this.image = image;
 		this.context = context;
 	}

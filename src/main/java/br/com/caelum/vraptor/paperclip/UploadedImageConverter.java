@@ -3,7 +3,6 @@ package br.com.caelum.vraptor.paperclip;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -13,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
-import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
+import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
+import br.com.caelum.vraptor.paperclip.resize.Resize;
+import br.com.caelum.vraptor.paperclip.resize.ResizeFactory;
 
 @Convert(UploadedImage.class)
 public class UploadedImageConverter implements Converter<UploadedImage> {
@@ -40,10 +41,10 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		
 		if (shouldResize()) {
 			Resize resize = findResize();
-			image = resizer.resize(image, resize);
+			image = resizer.resize(image, ResizeFactory.build(resize));
 		}
 		
-		return new UploadedImage(file, image, context);
+		return new UploadedImage(image, context);
 	}
 
 	private BufferedImage readImage(UploadedFile file) {
