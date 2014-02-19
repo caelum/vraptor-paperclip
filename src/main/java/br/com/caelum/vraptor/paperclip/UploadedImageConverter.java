@@ -13,9 +13,11 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
+import br.com.caelum.vraptor.paperclip.crop.Crop;
+import br.com.caelum.vraptor.paperclip.crop.ImageCropper;
+import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
 import br.com.caelum.vraptor.paperclip.resize.Resize;
 import br.com.caelum.vraptor.paperclip.resize.ResizeFactory;
-import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
 
 @Convert(UploadedImage.class)
 public class UploadedImageConverter implements Converter<UploadedImage> {
@@ -31,6 +33,9 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	
 	@Inject
 	private ImageResizer resizer;
+	
+	@Inject
+	private ImageCropper cropper;
 
 	@Override
 	public UploadedImage convert(String name,
@@ -41,11 +46,22 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		UploadedImage upload = new UploadedImage(image, context);
 		
 		if (shouldResize()) {
-			Resize resize = findResize();
+			Resize resize = findAnnotation(Resize.class);
 			upload = resizer.resize(upload, ResizeFactory.build(resize));
 		}
 		
+		if (shouldCrop()) {
+			Crop crop = findAnnotation(Crop.class);
+			int width = crop.width();
+			int height = crop.height();
+			upload = cropper.crop(upload, width, height);
+		}
+		
 		return upload;
+	}
+
+	private boolean shouldCrop() {
+		return findAnnotation(Crop.class) != null;
 	}
 
 	private BufferedImage readImage(UploadedFile file) {
@@ -57,16 +73,16 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	}
 
 	private boolean shouldResize() {
-		return findResize() != null;
+		return findAnnotation(Resize.class) != null;
 	}
 
-	private Resize findResize() {
+	private <T> T findAnnotation(Class<T> annotationClass) {
 		Annotation[][] annotations = method.getMethod().getParameterAnnotations();
 		if (annotations.length > 0) {
 			for (Annotation[] annotationsOnParam : annotations) {
 				for (Annotation annotation : annotationsOnParam) {
-					if (annotation instanceof Resize) {
-						return (Resize) annotation;
+					if (annotationClass.isAssignableFrom(annotation.getClass())) {
+						return annotationClass.cast(annotation);
 					}
 				}
 			}
