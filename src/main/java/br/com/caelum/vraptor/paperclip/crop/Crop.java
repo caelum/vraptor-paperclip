@@ -11,5 +11,6 @@ public @interface Crop {
 
 	int width();
 	int height();
+	CropType type() default CropType.CENTERED;
 
 }

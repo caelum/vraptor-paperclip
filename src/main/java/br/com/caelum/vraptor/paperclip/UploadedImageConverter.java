@@ -13,8 +13,9 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
-import br.com.caelum.vraptor.paperclip.crop.CenteredCrop;
 import br.com.caelum.vraptor.paperclip.crop.Crop;
+import br.com.caelum.vraptor.paperclip.crop.CropOperation;
+import br.com.caelum.vraptor.paperclip.crop.CropType;
 import br.com.caelum.vraptor.paperclip.crop.ImageCropper;
 import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
 import br.com.caelum.vraptor.paperclip.resize.Resize;
@@ -53,9 +54,11 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		
 		if (shouldCrop()) {
 			Crop crop = findAnnotation(Crop.class);
+			CropType cropType = crop.type();
 			int width = crop.width();
 			int height = crop.height();
-			upload = cropper.crop(upload, new CenteredCrop(upload, width, height));
+			CropOperation cropOperation = cropType.buildOperation(upload, width, height);
+			upload = cropper.crop(upload, cropOperation);
 		}
 		
 		return upload;
