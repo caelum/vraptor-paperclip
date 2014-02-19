@@ -32,7 +32,7 @@
 			<artifactId>vraptor</artifactId>
 			<version>4.0.0-RC1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -44,6 +44,12 @@
 			<artifactId>servlet-api</artifactId>
 			<version>3.0.20100224</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
 		</dependency>
 
 		<dependency>

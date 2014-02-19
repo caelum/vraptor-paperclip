@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Resize {
 
-	double value();
+	int width() default 0;
+	int height() default 0;
+	double ratio() default 1.0;
 
 }
