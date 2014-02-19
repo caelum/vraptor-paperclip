@@ -13,9 +13,9 @@ import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
-import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
 import br.com.caelum.vraptor.paperclip.resize.Resize;
 import br.com.caelum.vraptor.paperclip.resize.ResizeFactory;
+import br.com.caelum.vraptor.paperclip.resize.ImageResizer;
 
 @Convert(UploadedImage.class)
 public class UploadedImageConverter implements Converter<UploadedImage> {
