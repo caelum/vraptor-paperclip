@@ -12,9 +12,9 @@ import org.apache.commons.io.FilenameUtils;
 
 public class UploadedImage {
 	
-	private ServletContext context;
+	private final ServletContext context;
 	
-	private BufferedImage image;
+	private final BufferedImage image;
 
 	public UploadedImage(BufferedImage image, ServletContext context) {
 		this.image = image;
@@ -34,6 +34,18 @@ public class UploadedImage {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public int getHeight() {
+		return getImage().getHeight();
+	}
+
+	public int getWidth() {
+		return getImage().getWidth();
 	}
 
 }

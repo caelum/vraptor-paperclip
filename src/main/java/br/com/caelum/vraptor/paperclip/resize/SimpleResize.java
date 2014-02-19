@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.paperclip.resize;
 
-import java.awt.image.BufferedImage;
+import br.com.caelum.vraptor.paperclip.UploadedImage;
 
 public class SimpleResize implements ImageResize {
 	private int height;
@@ -12,12 +12,12 @@ public class SimpleResize implements ImageResize {
 	}
 
 	@Override
-	public int width(BufferedImage image) {
+	public int width(UploadedImage image) {
 		return width;
 	}
 
 	@Override
-	public int height(BufferedImage image) {
+	public int height(UploadedImage image) {
 		return height;
 	}
 }

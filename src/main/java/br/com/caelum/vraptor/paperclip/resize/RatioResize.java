@@ -1,6 +1,6 @@
 package br.com.caelum.vraptor.paperclip.resize;
 
-import java.awt.image.BufferedImage;
+import br.com.caelum.vraptor.paperclip.UploadedImage;
 
 public class RatioResize implements ImageResize {
 	
@@ -11,13 +11,13 @@ public class RatioResize implements ImageResize {
 	}
 
 	@Override
-	public int width(BufferedImage image) {
+	public int width(UploadedImage image) {
 		int originalWidth = image.getWidth();
 		return (int) (originalWidth * ratio);
 	}
 
 	@Override
-	public int height(BufferedImage image) {
+	public int height(UploadedImage image) {
 		int originalHeight = image.getHeight();
 		return (int) (originalHeight * ratio);
 	}

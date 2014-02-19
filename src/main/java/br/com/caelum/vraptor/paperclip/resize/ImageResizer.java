@@ -1,9 +1,9 @@
 package br.com.caelum.vraptor.paperclip.resize;
 
-import java.awt.image.BufferedImage;
+import br.com.caelum.vraptor.paperclip.UploadedImage;
 
 public interface ImageResizer {
 
-	public abstract BufferedImage resize(BufferedImage image, ImageResize resize);
+	public abstract UploadedImage resize(UploadedImage image, ImageResize resize);
 
 }

@@ -36,15 +36,16 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	public UploadedImage convert(String name,
 			Class<? extends UploadedImage> type) {
 		UploadedFile file = (UploadedFile) request.getAttribute(name);
-		
 		BufferedImage image = readImage(file);
+		
+		UploadedImage upload = new UploadedImage(image, context);
 		
 		if (shouldResize()) {
 			Resize resize = findResize();
-			image = resizer.resize(image, ResizeFactory.build(resize));
+			upload = resizer.resize(upload, ResizeFactory.build(resize));
 		}
 		
-		return new UploadedImage(image, context);
+		return upload;
 	}
 
 	private BufferedImage readImage(UploadedFile file) {
