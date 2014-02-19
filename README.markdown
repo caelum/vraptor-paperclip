@@ -29,7 +29,7 @@ public class ProfilePhotoController {
     @Public
     @Post("/profile/upload")
     public void savePhoto(UploadedImage image) {
-        image.save("/images", "upload.png");
+        image.save("/images/upload.png");
     }
 
 }
@@ -56,7 +56,7 @@ public class ProfilePhotoController {
     @Public
     @Post("/profile/upload")
     public void savePhoto(@Resize(width=100, height=100) UploadedImage image) {
-        image.save("/images", "upload.png");
+        image.save("/images/upload.png");
     }
 
 }
@@ -80,7 +80,7 @@ public class ProfilePhotoController {
     @Post("/profile/upload")
     public void savePhoto(UploadedImage image) {
         UploadedImage resized = resizer.resize(image, new SimpleResize(100, 100));
-        resized.save("/images", "upload.png");
+        resized.save("/images/upload.png");
     }
 
 }
