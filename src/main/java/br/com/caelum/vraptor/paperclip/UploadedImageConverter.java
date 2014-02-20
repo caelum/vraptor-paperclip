@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.paperclip;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -12,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import br.com.caelum.vraptor.Convert;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
+import br.com.caelum.vraptor.http.Parameter;
+import br.com.caelum.vraptor.http.ParameterNameProvider;
 import br.com.caelum.vraptor.observer.upload.UploadedFile;
 import br.com.caelum.vraptor.paperclip.crop.Crop;
 import br.com.caelum.vraptor.paperclip.crop.CropOperation;
@@ -38,22 +39,27 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	
 	@Inject
 	private ImageCropper cropper;
+	
+	@Inject
+	private ParameterNameProvider provider;
 
 	@Override
 	public UploadedImage convert(String name,
 			Class<? extends UploadedImage> type) {
+		
 		UploadedFile file = (UploadedFile) request.getAttribute(name);
 		BufferedImage image = readImage(file);
+		Parameter parameter = findParameter(name);
 		
 		UploadedImage upload = new UploadedImage(image, context);
 		
-		if (shouldResize()) {
-			Resize resize = findAnnotation(Resize.class);
+		if (parameter.isAnnotationPresent(Resize.class)) {
+			Resize resize = parameter.getAnnotation(Resize.class);
 			upload = resizer.resize(upload, ResizeFactory.build(resize));
 		}
 		
-		if (shouldCrop()) {
-			Crop crop = findAnnotation(Crop.class);
+		if (parameter.isAnnotationPresent(Crop.class)) {
+			Crop crop = parameter.getAnnotation(Crop.class);
 			CropType cropType = crop.type();
 			int width = crop.width();
 			int height = crop.height();
@@ -64,9 +70,16 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		return upload;
 	}
 
-	private boolean shouldCrop() {
-		return findAnnotation(Crop.class) != null;
+	private Parameter findParameter(String name) {
+		Parameter[] parameters = provider.parametersFor(this.method.getMethod());
+		for (Parameter parameter : parameters) {
+			if (parameter.getName().equals(name)) {
+				return parameter;
+			}
+		}
+		throw new IllegalStateException("Could not find parameter named \"" + name + "\"");
 	}
+
 
 	private BufferedImage readImage(UploadedFile file) {
 		try {
@@ -74,24 +87,6 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private boolean shouldResize() {
-		return findAnnotation(Resize.class) != null;
-	}
-
-	private <T> T findAnnotation(Class<T> annotationClass) {
-		Annotation[][] annotations = method.getMethod().getParameterAnnotations();
-		if (annotations.length > 0) {
-			for (Annotation[] annotationsOnParam : annotations) {
-				for (Annotation annotation : annotationsOnParam) {
-					if (annotationClass.isAssignableFrom(annotation.getClass())) {
-						return annotationClass.cast(annotation);
-					}
-				}
-			}
-		}
-		return null;
 	}
 
 }
