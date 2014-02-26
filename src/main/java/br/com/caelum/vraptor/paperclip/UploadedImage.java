@@ -1,41 +1,47 @@
 package br.com.caelum.vraptor.paperclip;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
-import static org.apache.commons.io.FilenameUtils.getPath;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FilenameUtils;
 
+import br.com.caelum.vraptor.amazonS3.FileStorage;
+
 public class UploadedImage {
-	
-	private final ServletContext context;
 	
 	private final BufferedImage image;
 
-	public UploadedImage(BufferedImage image, ServletContext context) {
+	private FileStorage storage;
+
+	public UploadedImage(BufferedImage image, FileStorage storage) {
 		this.image = image;
-		this.context = context;
+		this.storage = storage;
 	}
 
-	public void save(String localPath) {
-		String path = getPath(localPath);
-		String filename = FilenameUtils.getName(localPath);
-		String realPath = context.getRealPath(path);
-		File file = new File(realPath, filename);
-		write(file);
+	public URL save(String path) {
+		String filename = FilenameUtils.getName(path);
+		InputStream is = imageToInputStream(path);
+		return storage.store(is, path, contentTypeOf(filename));
 	}
 
-	private void write(File file) {
-		String extension = getExtension(file.getName());
+	private String contentTypeOf(String localPath) {
+		return "image/" + getExtension(localPath);
+	}
+
+	private InputStream imageToInputStream(String localPath) {
+		String extension = getExtension(localPath);
 		try {
-			ImageIO.write(image, extension, new FileOutputStream(file));
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(image, extension, os);
+			return new ByteArrayInputStream(os.toByteArray());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

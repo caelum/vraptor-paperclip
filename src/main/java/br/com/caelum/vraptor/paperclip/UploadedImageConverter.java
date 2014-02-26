@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Convert;
+import br.com.caelum.vraptor.amazonS3.FileStorage;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.http.Parameter;
@@ -29,9 +29,6 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	private HttpServletRequest request;
 	
 	@Inject
-	private ServletContext context;
-	
-	@Inject
 	private ControllerMethod method;
 	
 	@Inject
@@ -42,6 +39,9 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 	
 	@Inject
 	private ParameterNameProvider provider;
+	
+	@Inject
+	private FileStorage storage;
 
 	@Override
 	public UploadedImage convert(String name,
@@ -51,7 +51,7 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		BufferedImage image = readImage(file);
 		Parameter parameter = findParameter(name);
 		
-		UploadedImage upload = new UploadedImage(image, context);
+		UploadedImage upload = new UploadedImage(image, storage);
 		
 		if (parameter.isAnnotationPresent(Resize.class)) {
 			Resize resize = parameter.getAnnotation(Resize.class);
