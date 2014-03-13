@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.io.FilenameUtils;
 
 import br.com.caelum.vraptor.amazonS3.FileStorage;
+import br.com.caelum.vraptor.observer.upload.UploadedFile;
 
 public class UploadedImage {
 	
@@ -21,9 +22,15 @@ public class UploadedImage {
 
 	private FileStorage storage;
 
-	public UploadedImage(BufferedImage image, FileStorage storage) {
+	private UploadedFile uploadedFile;
+
+	private long timestamp;
+
+	public UploadedImage(BufferedImage image, FileStorage storage, UploadedFile uploadedFile) {
 		this.image = image;
 		this.storage = storage;
+		this.uploadedFile = uploadedFile;
+		this.timestamp = System.nanoTime();
 	}
 
 	public URL save(String path) {
@@ -31,9 +38,19 @@ public class UploadedImage {
 		InputStream is = imageToInputStream(path);
 		return storage.store(is, path, contentTypeOf(filename));
 	}
+	
+	public URL saveWithTimestamp(String dir){
+		return save(dir+"/"+timestampedName());
+	}
 
 	private String contentTypeOf(String localPath) {
 		return "image/" + getExtension(localPath);
+	}
+	
+	public String timestampedName(){
+		String fileName = FilenameUtils.getBaseName(uploadedFile.getFileName());
+		String extension = getExtension(uploadedFile.getFileName());
+		return fileName + "_" + timestamp + "." + extension;
 	}
 
 	private InputStream imageToInputStream(String localPath) {
@@ -59,4 +76,8 @@ public class UploadedImage {
 		return getImage().getWidth();
 	}
 
+	public UploadedImage recreate(BufferedImage cropped) {
+		return new UploadedImage(cropped, storage, uploadedFile);
+	}
+	
 }
