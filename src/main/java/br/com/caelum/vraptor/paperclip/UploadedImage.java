@@ -42,6 +42,10 @@ public class UploadedImage {
 	public URL saveWithTimestamp(String dir){
 		return save(dir+"/"+timestampedName());
 	}
+	
+	public String extension(){
+		return FilenameUtils.getExtension(uploadedFile.getFileName());
+	}
 
 	private String contentTypeOf(String localPath) {
 		return "image/" + getExtension(localPath);
