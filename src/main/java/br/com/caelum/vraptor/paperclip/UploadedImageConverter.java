@@ -51,7 +51,7 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 		BufferedImage image = readImage(file);
 		Parameter parameter = findParameter(name);
 		
-		UploadedImage upload = new UploadedImage(image, storage);
+		UploadedImage upload = new UploadedImage(image, storage,file);
 		
 		if (parameter.isAnnotationPresent(Resize.class)) {
 			Resize resize = parameter.getAnnotation(Resize.class);

@@ -2,17 +2,11 @@ package br.com.caelum.vraptor.paperclip.crop;
 
 import java.awt.image.BufferedImage;
 
-import javax.inject.Inject;
-
 import org.imgscalr.Scalr;
 
-import br.com.caelum.vraptor.amazonS3.FileStorage;
 import br.com.caelum.vraptor.paperclip.UploadedImage;
 
 public class DefaultImageCropper implements ImageCropper {
-
-	@Inject
-	private FileStorage storage;
 
 	@Override
 	public UploadedImage crop(UploadedImage upload, CropOperation operation) {
@@ -24,7 +18,7 @@ public class DefaultImageCropper implements ImageCropper {
 		
 		BufferedImage cropped = Scalr.crop(upload.getImage(), topLeftX, topLeftY, width, height);
 		
-		return new UploadedImage(cropped, storage);
+		return upload.recreate(cropped);
 	}
 
 }
