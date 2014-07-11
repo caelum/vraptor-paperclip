@@ -48,6 +48,9 @@ public class UploadedImageConverter implements Converter<UploadedImage> {
 			Class<? extends UploadedImage> type) {
 		
 		UploadedFile file = (UploadedFile) request.getAttribute(name);
+		if (file == null) {
+			return null;
+		}
 		BufferedImage image = readImage(file);
 		Parameter parameter = findParameter(name);
 		
